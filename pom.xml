@@ -10,6 +10,10 @@
     <version>1.1.0</version>
     <modules>
         <module>common-service</module>
+        <module>redis-server</module>
+        <module>app</module>
+        <module>persist-service</module>
+        <module>rabbitmq-server</module>
     </modules>
 
 
