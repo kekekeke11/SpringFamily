@@ -1,8 +1,9 @@
 package com.google.controller;
 
 import com.google.service.MessageHandleService;
+import com.google.utils.JaxbUtil;
 import com.google.utils.SignatureUtil;
-import com.sun.xml.internal.ws.util.xml.XmlUtil;
+import com.google.utils.StreamToString;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,18 +65,18 @@ public class WeChatController extends BaseController {
         this.getResponse().setCharacterEncoding("UTF-8");
 
         logger.info("开始校验信息是否是从微信服务器发出");
-        boolean ispost = Objects.equals("POST", this.getRequest().getMethod().toUpperCase());
-        if (ispost) {
+        boolean isPost = Objects.equals("POST", this.getRequest().getMethod().toUpperCase());
+        if (isPost) {
             logger.info("接入成功，正在处理逻辑");
             InputStream inputStream = this.getRequest().getInputStream();
-            logger.info("inputStream :{}", inputStream);
-
-         /*   Map<String, String> params = XmlUtil.parseStreamToMap(inputStream);
+            String xml = StreamToString.getString(inputStream, "UTF-8");
+            logger.info("inputStream :{}。{}", inputStream, xml);
+            Map<String, String> params = JaxbUtil.xmlToMap(xml);
             String respXml = messageHandleService.handleMessage(params);
             if (StringUtils.isNotBlank(respXml)) {
                 // 输出流
                 this.getResponse().getWriter().write(respXml);
-            }*/
+            }
         } else {
             // 签名
             String signature = this.getRequest().getParameter("signature");

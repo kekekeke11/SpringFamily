@@ -24,10 +24,10 @@ public class MessageHandleServiceImpl implements MessageHandleService {
     @Autowired
     private CodeHandleService codeHandleService;
 
-    /*
+    /**
      * 对来自微信的消息作出响应(包含消息和事件)
      *
-     * @param inputStream
+     * @param params
      *
      * @return
      *
@@ -52,7 +52,7 @@ public class MessageHandleServiceImpl implements MessageHandleService {
             if (null == resp) {
                 return null;
             }
-            logger.info("响应成功的消息: {},{}", resp.getObject());
+            logger.info("响应成功的消息: {}", resp.getObject());
      /*       boolean success = resp.isSuccess(); // 如果 为true,则表示返回xml文件, 直接转换即可,否则按类型
             if (success) {
                 result = resp.getObject().toString();

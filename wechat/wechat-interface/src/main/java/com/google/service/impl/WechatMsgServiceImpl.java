@@ -27,13 +27,11 @@ public class WechatMsgServiceImpl implements WechatMsgService {
 
     private static final Logger logger = LoggerFactory.getLogger(WeChatController.class);
 
-    /*
-     * TODO
+    /**
+     * 公众号收到文本信息
      *
      * @param params
-     *
      * @param msgInfo
-     *
      * @return
      */
     @Override
@@ -52,13 +50,11 @@ public class WechatMsgServiceImpl implements WechatMsgService {
         return result;
     }
 
-    /*
-     * TODO
+    /**
+     * 公众号收到图片消息
      *
      * @param params
-     *
      * @param msgInfo
-     *
      * @return
      */
     @Override
@@ -67,13 +63,11 @@ public class WechatMsgServiceImpl implements WechatMsgService {
         return null;
     }
 
-    /*
-     * TODO
+    /**
+     * 公众号收到链接消息
      *
      * @param params
-     *
      * @param msgInfo
-     *
      * @return
      */
     @Override
@@ -82,13 +76,11 @@ public class WechatMsgServiceImpl implements WechatMsgService {
         return null;
     }
 
-    /*
-     * TODO
+    /**
+     * 公众号收到链接地理位置消息
      *
      * @param params
-     *
      * @param msgInfo
-     *
      * @return
      */
     @Override
@@ -97,13 +89,11 @@ public class WechatMsgServiceImpl implements WechatMsgService {
         return null;
     }
 
-    /*
-     * TODO
+    /**
+     * 公众号收到链接语音消息
      *
      * @param params
-     *
      * @param msgInfo
-     *
      * @return
      */
     @Override
@@ -112,13 +102,11 @@ public class WechatMsgServiceImpl implements WechatMsgService {
         return null;
     }
 
-    /*
-     * TODO
+    /**
+     * 公众号收到链接小视频消息
      *
      * @param params
-     *
      * @param msgInfo
-     *
      * @return
      */
     @Override
@@ -127,13 +115,11 @@ public class WechatMsgServiceImpl implements WechatMsgService {
         return null;
     }
 
-    /*
-     * TODO
+    /**
+     * 公众号收到链接视频消息
      *
      * @param params
-     *
      * @param msgInfo
-     *
      * @return
      */
     @Override
@@ -142,13 +128,11 @@ public class WechatMsgServiceImpl implements WechatMsgService {
         return null;
     }
 
-    /*
-     * TODO
+    /**
+     * 订阅事件
      *
      * @param params
-     *
      * @param msgInfo
-     *
      * @return
      */
     @Override
@@ -162,13 +146,11 @@ public class WechatMsgServiceImpl implements WechatMsgService {
         return null;
     }
 
-    /*
-     * TODO
+    /**
+     * 取消订阅事件
      *
      * @param params
-     *
      * @param msgInfo
-     *
      * @return
      */
     @Override

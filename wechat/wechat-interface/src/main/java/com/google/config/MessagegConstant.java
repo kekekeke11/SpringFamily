@@ -7,10 +7,10 @@ package com.google.config;
  **/
 public class MessagegConstant {
 
-    public static final String REQ_MESSAGE_TYPE_TEXT = "REQ_MESSAGE_TYPE_TEXT";
-    public static final String REQ_MESSAGE_TYPE_IMAGE = "REQ_MESSAGE_TYPE_IMAGE";
-    public static final String REQ_MESSAGE_TYPE_LINK = "REQ_MESSAGE_TYPE_LINK";
-    public static final String REQ_MESSAGE_TYPE_LOCATION = "REQ_MESSAGE_TYPE_LOCATION";
+    public static final String REQ_MESSAGE_TYPE_TEXT = "text";
+    public static final String REQ_MESSAGE_TYPE_IMAGE = "image";
+    public static final String REQ_MESSAGE_TYPE_LINK = "link";
+    public static final String REQ_MESSAGE_TYPE_LOCATION = "location";
     public static final String REQ_MESSAGE_TYPE_VOICE = "REQ_MESSAGE_TYPE_VOICE";
     public static final String REQ_MESSAGE_TYPE_SHORTVIDEO = "REQ_MESSAGE_TYPE_SHORTVIDEO";
     public static final String REQ_MESSAGE_TYPE_VIDEO = "REQ_MESSAGE_TYPE_VIDEO";

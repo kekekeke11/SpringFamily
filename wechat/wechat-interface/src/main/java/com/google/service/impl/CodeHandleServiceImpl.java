@@ -23,13 +23,9 @@ public class CodeHandleServiceImpl implements CodeHandleService {
     @Autowired
     private WechatMsgService wechatMsgService;
 
-    /*
-     * TODO
-     *
+    /**
      * @param params
-     *
      * @param msgInfo
-     *
      * @return
      */
     @Override
