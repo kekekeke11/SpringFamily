@@ -27,6 +27,11 @@ public class MenuService {
     public static String MENU_GET = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN";
 
     /**
+     * 删除默认菜单及全部个性化菜单。
+     */
+    public static String MENU_DELETE = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
+
+    /**
      * 创建菜单
      *
      * @param jsonMenu json格式
@@ -35,6 +40,11 @@ public class MenuService {
     public static Integer createMenu(String jsonMenu, String access_token) {
         int result = 0;
         if (access_token != null) {
+
+            String url3 = MENU_DELETE.replace("ACCESS_TOKEN", access_token);
+            String resp3 = HttpClientUtils.doPostJson(url3, jsonMenu);
+            System.out.println("调用菜单删除接口：" + resp3);
+
             // 拼装创建菜单的url
             String url = MENU_CREATE.replace("ACCESS_TOKEN", access_token);
             // 调用接口创建菜单

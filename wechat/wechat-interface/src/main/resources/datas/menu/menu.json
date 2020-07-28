@@ -1,29 +1,34 @@
 {
   "button": [
     {
-      "name": "快来世界",
+      "name": "我的",
       "sub_button": [
         {
           "type": "click",
-          "name": "BUG反馈",
-          "key": "CLICK_BUG"
+          "name": "信息绑定",
+          "key": "CLICK_INFO"
         },
         {
           "type": "click",
-          "name": "人工客服",
-          "key": "CLICK_RGKF"
+          "name": "个人信息",
+          "key": "CLICK_UAC"
         },
         {
-          "type": "view",
-          "name": "游戏下载",
-          "url": "http://www.soso.com/"
+          "type": "click",
+          "name": "企业信息",
+          "key": "CLICK_COMP"
         }
       ]
     },
     {
       "type": "view",
-      "name": "游戏盒子",
-      "url": "http://www.soso.com/"
+      "name": "百度一下",
+      "url": "http://www.baidu.com/"
+    },
+    {
+      "type": "click",
+      "name": "人工服务",
+      "key": "CLICK_RGKF"
     }
   ]
 }
