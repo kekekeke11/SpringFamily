@@ -6,22 +6,17 @@ import com.google.config.WechatConstant;
 import com.google.service.impl.MenuService;
 import com.google.utils.http.HttpClientUtils;
 import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author wk
- * @Description:
+ * @Description:定时任务获取Token
  * @date 2020/7/28 12:41
  **/
 @Service
 public class TokenThread implements Runnable {
 
     public static AccessToken accesstoken = null;
-
-    @Autowired
-    private RestTemplate restTemplate;
 
     public void run() {
 

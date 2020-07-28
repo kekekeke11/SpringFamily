@@ -2,7 +2,7 @@ package com.google.utils.accessToken;
 
 /**
  * @author wk
- * @Description:
+ * @Description:获取Token
  * @date 2020/7/28 12:19
  **/
 public class AccessToken {

@@ -53,7 +53,7 @@ public class MessageHandleServiceImpl implements MessageHandleService {
             }
             logger.info("响应成功的消息: {}", resp.getObject());
             //对象转xml
-            String xml = JaxbUtil.convertToXml(resp.getObject(), "UTF_8", false);
+            String xml = JaxbUtil.convertToXml(resp.getObject(), "UTF-8", false);
             result = xml;
      /*       boolean success = resp.isSuccess(); // 如果 为true,则表示返回xml文件, 直接转换即可,否则按类型
             if (success) {
