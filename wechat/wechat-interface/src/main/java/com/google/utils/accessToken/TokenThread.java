@@ -1,7 +1,9 @@
 package com.google.utils.accessToken;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.config.JsonConfig;
 import com.google.config.WechatConstant;
+import com.google.service.impl.MenuService;
 import com.google.utils.http.HttpClientUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,7 @@ public class TokenThread implements Runnable {
                     WechatConstant.ACCESS_TOKEN = accesstoken.getAccess_token();
                     System.out.println("获取accesstoken成功，accesstoken：" + accesstoken.getAccess_token() + " 有效时间为"
                             + accesstoken.getExpires_in());
+                    menu(accesstoken.getAccess_token());
                     Thread.sleep((accesstoken.getExpires_in() - 200) * 1000);// 休眠7000秒
                 } else {
                     Thread.sleep(60 * 1000);
@@ -65,5 +68,14 @@ public class TokenThread implements Runnable {
         }
         System.out.println(resp);
         return accessToken;
+    }
+
+    /**
+     * 自定义菜单
+     */
+    public static void menu(String token) {
+        String access_token = token;
+        String menu = JsonConfig.getJsonResource("datas/menu/menu").toString();
+        MenuService.createMenu(menu, access_token);
     }
 }

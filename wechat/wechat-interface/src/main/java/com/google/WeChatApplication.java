@@ -1,5 +1,8 @@
 package com.google;
 
+import com.google.config.JsonConfig;
+import com.google.config.WechatConstant;
+import com.google.service.impl.MenuService;
 import com.google.utils.accessToken.TokenThread;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +11,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
+
+import javax.servlet.ServletException;
 
 
 /**
@@ -24,9 +29,12 @@ public class WeChatApplication {
         init();
     }
 
+    /**
+     * 启动线程定时获取access_token
+     */
     public static void init() {
-        // 启动线程定时获取access_token
         new Thread(new TokenThread()).start();
     }
+
 
 }

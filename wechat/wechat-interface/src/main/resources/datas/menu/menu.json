@@ -1,0 +1,29 @@
+{
+  "button": [
+    {
+      "name": "快来世界",
+      "sub_button": [
+        {
+          "type": "click",
+          "name": "BUG反馈",
+          "key": "CLICK_BUG"
+        },
+        {
+          "type": "click",
+          "name": "人工客服",
+          "key": "CLICK_RGKF"
+        },
+        {
+          "type": "view",
+          "name": "游戏下载",
+          "url": "http://www.soso.com/"
+        }
+      ]
+    },
+    {
+      "type": "view",
+      "name": "游戏盒子",
+      "url": "http://www.soso.com/"
+    }
+  ]
+}
