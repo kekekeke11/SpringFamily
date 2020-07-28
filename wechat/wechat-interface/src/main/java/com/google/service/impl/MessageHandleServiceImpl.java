@@ -4,6 +4,7 @@ import com.google.dto.BaseMessage;
 import com.google.dto.WeChatResult;
 import com.google.service.CodeHandleService;
 import com.google.service.MessageHandleService;
+import com.google.utils.JaxbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,7 @@ public class MessageHandleServiceImpl implements MessageHandleService {
      * 对来自微信的消息作出响应(包含消息和事件)
      *
      * @param params
-     *
      * @return
-     *
      * @throws Exception
      */
     @Override
@@ -53,6 +52,9 @@ public class MessageHandleServiceImpl implements MessageHandleService {
                 return null;
             }
             logger.info("响应成功的消息: {}", resp.getObject());
+            //对象转xml
+            String xml = JaxbUtil.convertToXml(resp.getObject(), "UTF_8", false);
+            result = xml;
      /*       boolean success = resp.isSuccess(); // 如果 为true,则表示返回xml文件, 直接转换即可,否则按类型
             if (success) {
                 result = resp.getObject().toString();

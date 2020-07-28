@@ -1,17 +1,35 @@
 package com.google.dto;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 /**
  * @author wk
  * @Description:
  * @date 2020/7/27 14:52
  **/
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlRootElement(name = "xml")
 public class TextMessage {
 
+    @XmlElement(name = "Content")
     private String content;
+
+    @XmlElement(name = "CreateTime")
     private long createTime;
+
+    @XmlElement(name = "ToUserName")
     private String toUserName;
+
+    @XmlElement(name = "FromUserName")
     private String fromUserName;
+
+    @XmlElement(name = "MsgId")
     private long msgId;
+
+    @XmlElement(name = "MsgType")
     private String msgType;
 
     public String getContent() {
