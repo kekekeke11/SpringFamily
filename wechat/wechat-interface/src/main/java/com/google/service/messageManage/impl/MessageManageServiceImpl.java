@@ -2,13 +2,15 @@ package com.google.service.messageManage.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.google.config.WechatConstant;
+import com.google.config.redisConfig.AccessTokenConfig;
 import com.google.service.impl.MenuService;
 import com.google.service.messageManage.MessageManageService;
 import com.google.utils.http.HttpClientUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -23,7 +25,11 @@ public class MessageManageServiceImpl implements MessageManageService {
 
     public static Logger log = LoggerFactory.getLogger(MenuService.class);
 
-    public static String TEMPLATE_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN";
+    @Value("${wechat.TEMPLATE_URL}")
+    public String TEMPLATE_URL;
+
+    @Autowired
+    private AccessTokenConfig accessTokenConfig;
 
     @Override
     public void sendTemplateManage(Map<String, Object> params) {
@@ -49,10 +55,10 @@ public class MessageManageServiceImpl implements MessageManageService {
         data.put("compName2", param2);
         data.put("amt", param3);
         jsonObject.put("data", data);
-        this.send(jsonObject.toJSONString(), WechatConstant.ACCESS_TOKEN);
+        this.send(jsonObject.toJSONString(), accessTokenConfig.getAccessToken());
     }
 
-    public static Integer send(String jsonParam, String access_token) {
+    public Integer send(String jsonParam, String access_token) {
         int result = 0;
         if (access_token != null) {
 

@@ -2,10 +2,14 @@ package com.google.utils.accessToken;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.config.JsonConfig;
-import com.google.config.WechatConstant;
+import com.google.config.redisConfig.AccessTokenConfig;
 import com.google.service.impl.MenuService;
 import com.google.utils.http.HttpClientUtils;
 import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
@@ -14,38 +18,48 @@ import org.springframework.stereotype.Service;
  * @date 2020/7/28 12:41
  **/
 @Service
-public class TokenThread implements Runnable {
+public class TokenThread {
+
+    public static Logger log = LoggerFactory.getLogger(MenuService.class);
+
+    /**
+     * 获取token url
+     */
+    @Value("${wechat.TOKEN_URL}")
+    private String TOKEN_URL;
+
+    /**
+     * 测试号配置信息
+     */
+    @Value("${wechat.APP_ID}")
+    public String APP_ID;
+
+    @Value("${wechat.APP_SECRET}")
+    public String APP_SECRET;
+
+    @Autowired
+    AccessTokenConfig accessTokenConfig;
+
 
     public static AccessToken accesstoken = null;
 
-    public void run() {
-
-        while (true) {
-            try {
-                accesstoken = this.getInterfaceToken(WechatConstant.APP_ID, WechatConstant.APP_SECRET);
-                if (null != accesstoken) {
-                    WechatConstant.ACCESS_TOKEN = accesstoken.getAccess_token();
-                    System.out.println("获取accesstoken成功，accesstoken：" + accesstoken.getAccess_token() + " 有效时间为"
-                            + accesstoken.getExpires_in());
-                    menu(accesstoken.getAccess_token());
-                    Thread.sleep((accesstoken.getExpires_in() - 200) * 1000);// 休眠7000秒
-                } else {
-                    Thread.sleep(60 * 1000);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-                try {
-                    Thread.sleep(60 * 1000);
-                } catch (Exception e2) {
-                    e.printStackTrace();
-                    System.out.println(e2.getMessage());
-                }
+    public void getAccessToken() {
+        try {
+            accesstoken = this.getInterfaceToken(APP_ID, APP_SECRET);
+            if (null != accesstoken) {
+                String access_token = accesstoken.getAccess_token();
+                accessTokenConfig.setAccessToken(access_token);
+                log.info("获取accesstoken成功，accesstoken：" + access_token + " 有效时间为"
+                        + accesstoken.getExpires_in());
+            } else {
+                log.info("获取accesstoken失败");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("获取accesstoken失败：{}", e.getMessage());
         }
     }
 
-
-    private static String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential";
 
     /**
      * 微信公众号
@@ -56,7 +70,7 @@ public class TokenThread implements Runnable {
      */
     public AccessToken getInterfaceToken(String appId, String appSecret) {
         AccessToken accessToken = null;
-        StringBuffer reqUrl = new StringBuffer(url).append("&appid=").append(appId).append("&secret=").append(appSecret);
+        StringBuffer reqUrl = new StringBuffer(TOKEN_URL).append("&appid=").append(appId).append("&secret=").append(appSecret);
         String resp = HttpClientUtils.doGet(reqUrl.toString());
         if (StringUtils.isNotBlank(resp)) {
             accessToken = JSONObject.parseObject(resp, AccessToken.class);
@@ -66,7 +80,7 @@ public class TokenThread implements Runnable {
     }
 
     /**
-     * 自定义菜单
+     * 创建自定义菜单
      */
     public static void menu(String token) {
         String access_token = token;

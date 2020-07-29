@@ -1,19 +1,11 @@
 package com.google;
 
-import com.google.config.JsonConfig;
-import com.google.config.WechatConstant;
-import com.google.service.impl.MenuService;
 import com.google.utils.accessToken.TokenThread;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.client.RestTemplate;
-
-import javax.servlet.ServletException;
-
+import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  * @author wk
@@ -26,15 +18,16 @@ public class WeChatApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(WeChatApplication.class, args);
-        init();
     }
+
+    @Autowired
+    TokenThread tokenThread;
 
     /**
-     * 启动线程定时获取access_token
+     * 定时任务获取token，每小时
      */
-    public static void init() {
-        new Thread(new TokenThread()).start();
+    @Scheduled(fixedRate = 600000)
+    public void cronGetToken() {
+        tokenThread.getAccessToken();
     }
-
-
 }

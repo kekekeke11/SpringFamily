@@ -1,6 +1,7 @@
 server:
   port: 80
 spring:
+  #数据源配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/scm_zhonghujin_v2_dev?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8
@@ -22,3 +23,22 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
     sql-script-encoding: utf-8
+  #redis配置
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 500
+        min-idle: 0
+    lettuce:
+      shutdown-timeout: 0
+#微信参数配置
+wechat:
+  APP_ID: wx50d4e7bbd034f1de
+  APP_SECRET: f8cfbc835c9693012e9e21ce8af56492
+  TOKEN_URL: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential
+  TEMPLATE_URL: https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN
