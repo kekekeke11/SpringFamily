@@ -3,7 +3,7 @@ package com.google.utils.accessToken;
 import com.alibaba.fastjson.JSONObject;
 import com.google.config.JsonConfig;
 import com.google.config.redisConfig.AccessTokenConfig;
-import com.google.service.impl.MenuService;
+import com.google.service.menuManagement.MenuService;
 import com.google.utils.http.HttpClientUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -39,6 +39,9 @@ public class TokenThread {
 
     @Autowired
     AccessTokenConfig accessTokenConfig;
+
+    @Autowired
+    private MenuService menuService;
 
 
     public static AccessToken accesstoken = null;
@@ -82,9 +85,9 @@ public class TokenThread {
     /**
      * 创建自定义菜单
      */
-    public static void menu(String token) {
+    public void menu(String token) {
         String access_token = token;
         String menu = JsonConfig.getJsonResource("datas/menu/menu").toString();
-        MenuService.createMenu(menu, access_token);
+        menuService.createMenu(menu, access_token);
     }
 }

@@ -37,8 +37,23 @@ spring:
     database: 0
 #微信参数配置
 wechat:
+  #接入微信开发平台参数
   TOKEN: WeChat
   APP_ID: wx50d4e7bbd034f1de
   APP_SECRET: f8cfbc835c9693012e9e21ce8af56492
+  #基本接口获取ACCESS_TOKEN地址
   TOKEN_URL: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential
+  #-功能接口
+  #--自定义菜单
+  #---菜单创建
+  MENU_CREATE: https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN
+  #---菜单查询
+  MENU_GET: https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN
+  #---删除默认菜单及全部个性化菜单
+  MENU_DELETE: https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN
+  #--消息管理
+  #---模板消息接口
   TEMPLATE_URL: https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=ACCESS_TOKEN
+  #--帐号管理
+  #---生成带参数二维码
+  QRCODE_URL: https://api.weixin.qq.com/cgi-bin/qrcode/create?access_token=ACCESS_TOKEN

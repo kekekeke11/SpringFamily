@@ -1,4 +1,4 @@
-package com.google.service.impl;
+package com.google.service.menuManagement;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -6,12 +6,15 @@ import com.google.utils.http.HttpClientUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 /**
  * @author wk
- * @Description:
+ * @Description:自定义菜单
  * @date 2020/7/28 13:44
  **/
+@Service
 public class MenuService {
 
     public static Logger log = LoggerFactory.getLogger(MenuService.class);
@@ -19,17 +22,20 @@ public class MenuService {
     /**
      * 菜单创建（POST） 限100（次/天）
      */
-    public static String MENU_CREATE = "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=ACCESS_TOKEN";
+    @Value("${wechat.MENU_CREATE}")
+    public String MENU_CREATE;
 
     /**
      * 菜单查询
      */
-    public static String MENU_GET = "https://api.weixin.qq.com/cgi-bin/menu/get?access_token=ACCESS_TOKEN";
+    @Value("${wechat.MENU_GET}")
+    public String MENU_GET;
 
     /**
      * 删除默认菜单及全部个性化菜单。
      */
-    public static String MENU_DELETE = "https://api.weixin.qq.com/cgi-bin/menu/delete?access_token=ACCESS_TOKEN";
+    @Value("${wechat.MENU_DELETE}")
+    public String MENU_DELETE;
 
     /**
      * 创建菜单
@@ -37,7 +43,7 @@ public class MenuService {
      * @param jsonMenu json格式
      * @return 状态 0 表示成功、其他表示失败
      */
-    public static Integer createMenu(String jsonMenu, String access_token) {
+    public Integer createMenu(String jsonMenu, String access_token) {
         int result = 0;
         if (access_token != null) {
 
