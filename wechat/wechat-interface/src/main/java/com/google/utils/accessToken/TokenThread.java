@@ -49,7 +49,7 @@ public class TokenThread {
     public void getAccessToken() {
         try {
             accesstoken = this.getInterfaceToken(APP_ID, APP_SECRET);
-            if (null != accesstoken) {
+            if (null != accesstoken && StringUtils.isNotBlank(accessTokenConfig.getAccessToken())) {
                 String access_token = accesstoken.getAccess_token();
                 accessTokenConfig.setAccessToken(access_token);
                 log.info("获取accesstoken成功，accesstoken：" + access_token + " 有效时间为"

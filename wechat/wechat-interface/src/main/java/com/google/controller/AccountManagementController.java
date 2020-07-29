@@ -1,6 +1,6 @@
 package com.google.controller;
 
-import com.google.service.messageManage.MessageManageService;
+import com.google.service.accountManagement.AccountManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -10,19 +10,24 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author wk
  * @Description:
- * @date 2020/7/28 17:16
+ * @date 2020/7/29 16:53
  **/
-@RequestMapping("message/")
+@RequestMapping("qrcode/")
 @Controller
-public class MessageManageController {
+public class AccountManagementController {
 
     @Autowired
-    private MessageManageService messageManageService;
+    private AccountManagementService accountManagementService;
 
+    /**
+     * 生成临时带参二维码
+     *
+     * @return
+     */
     @ResponseBody
-    @RequestMapping(value = "template", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "create", method = {RequestMethod.GET, RequestMethod.POST})
     public String sendTemplateManage() {
-        messageManageService.sendTemplateManage(null);
+        accountManagementService.productTempQrcode(null);
         return "调用成功";
     }
 }
