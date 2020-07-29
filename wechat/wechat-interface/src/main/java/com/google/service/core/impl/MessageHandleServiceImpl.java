@@ -1,9 +1,9 @@
-package com.google.service.impl;
+package com.google.service.core.impl;
 
 import com.google.dto.BaseMessage;
 import com.google.dto.WeChatResult;
-import com.google.service.CodeHandleService;
-import com.google.service.MessageHandleService;
+import com.google.service.core.CodeHandleService;
+import com.google.service.core.MessageHandleService;
 import com.google.utils.JaxbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.google.service;
+package com.google.service.core;
 
 import java.util.Map;
 

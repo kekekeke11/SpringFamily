@@ -1,10 +1,10 @@
-package com.google.service.impl;
+package com.google.service.core.impl;
 
 import com.google.controller.WeChatController;
 import com.google.dto.BaseMessage;
 import com.google.dto.TextMessage;
 import com.google.dto.WeChatResult;
-import com.google.service.WechatMsgService;
+import com.google.service.core.WechatMsgService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

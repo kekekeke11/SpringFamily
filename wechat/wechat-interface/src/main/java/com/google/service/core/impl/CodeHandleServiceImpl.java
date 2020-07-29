@@ -1,10 +1,10 @@
-package com.google.service.impl;
+package com.google.service.core.impl;
 
 import com.google.config.MessagegConstant;
 import com.google.dto.BaseMessage;
 import com.google.dto.WeChatResult;
-import com.google.service.CodeHandleService;
-import com.google.service.WechatMsgService;
+import com.google.service.core.CodeHandleService;
+import com.google.service.core.WechatMsgService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

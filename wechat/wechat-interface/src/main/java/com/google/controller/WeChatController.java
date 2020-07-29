@@ -1,6 +1,6 @@
 package com.google.controller;
 
-import com.google.service.MessageHandleService;
+import com.google.service.core.MessageHandleService;
 import com.google.utils.JaxbUtil;
 import com.google.utils.SignatureUtil;
 import com.google.utils.StreamToString;
