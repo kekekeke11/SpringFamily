@@ -28,14 +28,13 @@ spring:
     host: 127.0.0.1
     port: 6379
     password:
-    jedis:
-      pool:
-        max-active: 8
-        max-wait: -1
-        max-idle: 500
-        min-idle: 0
     lettuce:
       shutdown-timeout: 0
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+    database: 0
 #微信参数配置
 wechat:
   APP_ID: wx50d4e7bbd034f1de
