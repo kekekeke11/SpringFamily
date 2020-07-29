@@ -1,5 +1,8 @@
 package com.google.utils;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -9,10 +12,12 @@ import java.util.Arrays;
  * @Description:
  * @date 2020/7/27 13:59
  **/
+@Component
 public class SignatureUtil {
 
     // 此处的token即为微信接口配置填写的签名
-    private static final String TOKEN = "WeChat";
+    @Value("${wechat.TOKEN}")
+    private String TOKEN;
 
     /**
      * 验证签名
@@ -22,7 +27,7 @@ public class SignatureUtil {
      * @param nonce
      * @return
      */
-    public static boolean checkSignature(String signature, String timestamp, String nonce) {
+    public boolean checkSignature(String signature, String timestamp, String nonce) {
 
         // 1.将token、timestamp、nonce三个参数进行字典序排序
         String[] arr = new String[]{TOKEN, timestamp, nonce};

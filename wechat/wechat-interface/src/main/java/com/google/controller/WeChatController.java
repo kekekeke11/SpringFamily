@@ -30,6 +30,9 @@ public class WeChatController extends BaseController {
     @Autowired
     private MessageHandleService messageHandleService;
 
+    @Autowired
+    SignatureUtil signatureUtil;
+
     @RequestMapping(value = "/handler", method = {RequestMethod.GET, RequestMethod.POST})
     public void processPost() throws Exception {
 
@@ -57,7 +60,7 @@ public class WeChatController extends BaseController {
             // 随机数
             String nonce = this.getRequest().getParameter("nonce");
             // 通过检验signature对请求进行校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
-            if (SignatureUtil.checkSignature(signature, timestamp, nonce)) {
+            if (signatureUtil.checkSignature(signature, timestamp, nonce)) {
                 // 随机字符串
                 String echostr = this.getRequest().getParameter("echostr");
                 logger.info("接入成功，echostr {}", echostr);

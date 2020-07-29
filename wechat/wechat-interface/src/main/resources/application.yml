@@ -37,6 +37,7 @@ spring:
     database: 0
 #微信参数配置
 wechat:
+  TOKEN: WeChat
   APP_ID: wx50d4e7bbd034f1de
   APP_SECRET: f8cfbc835c9693012e9e21ce8af56492
   TOKEN_URL: https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential

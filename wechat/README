@@ -1,1 +1,8 @@
 微信公众号开发：
+1.接入微信接口测试平台
+2.获取Token
+3.调用接口
+4.处理返回信息，解析返回数据
+
+技术：
+springboot jpa redis rabbitmq
