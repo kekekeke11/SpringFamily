@@ -5,7 +5,7 @@ package com.google.constants;
  * @Description:微信公众号开发常量类
  * @date 2020/7/27 15:07
  **/
-public class MessagegConstant {
+public class MessageConstant {
 
     /**
      * 微信响应给公众号服务端的MsgType（消息类型）

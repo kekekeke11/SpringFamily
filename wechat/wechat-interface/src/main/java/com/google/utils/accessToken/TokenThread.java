@@ -1,7 +1,6 @@
 package com.google.utils.accessToken;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.config.JsonConfig;
 import com.google.config.redisConfig.AccessTokenConfig;
 import com.google.service.menuManagement.MenuService;
 import com.google.utils.http.HttpClientUtils;
@@ -40,18 +39,17 @@ public class TokenThread {
     @Autowired
     AccessTokenConfig accessTokenConfig;
 
-    @Autowired
-    private MenuService menuService;
-
-
     public static AccessToken accesstoken = null;
 
     public void getAccessToken() {
         try {
             accesstoken = this.getInterfaceToken(APP_ID, APP_SECRET);
-            if (null != accesstoken && StringUtils.isNotBlank(accessTokenConfig.getAccessToken())) {
+            if (null != accesstoken) {
                 String access_token = accesstoken.getAccess_token();
-                accessTokenConfig.setAccessToken(access_token);
+                // 有效期，单位秒
+                Long expiresIn = accesstoken.getExpires_in();
+                //提前5分钟过期
+                accessTokenConfig.setAccessToken(access_token, 5000000);
                 log.info("获取accesstoken成功，accesstoken：" + access_token + " 有效时间为"
                         + accesstoken.getExpires_in());
             } else {
@@ -65,7 +63,7 @@ public class TokenThread {
 
 
     /**
-     * 微信公众号
+     * 微信公众号获取Token
      *
      * @param appId
      * @param appSecret
@@ -80,14 +78,5 @@ public class TokenThread {
         }
         System.out.println(resp);
         return accessToken;
-    }
-
-    /**
-     * 创建自定义菜单
-     */
-    public void menu(String token) {
-        String access_token = token;
-        String menu = JsonConfig.getJsonResource("datas/menu/menu").toString();
-        menuService.createMenu(menu, access_token);
     }
 }

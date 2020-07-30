@@ -1,8 +1,11 @@
 package com.google.service.core;
 
-import java.util.Map;
+
+import com.google.model.RcvCommonMsg;
+
 
 public interface MessageHandleService {
 
-    String handleMessage(Map<String, String> params) throws Exception;
+    String handleMessage(RcvCommonMsg rcvCommonMsg) throws Exception;
+
 }

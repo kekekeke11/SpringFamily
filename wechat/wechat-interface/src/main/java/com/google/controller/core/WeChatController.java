@@ -1,20 +1,16 @@
 package com.google.controller.core;
 
+import com.google.commons.util.XmlConvertUtils;
+import com.google.model.RcvCommonMsg;
 import com.google.service.core.MessageHandleService;
-import com.google.utils.JaxbUtil;
 import com.google.utils.SignatureUtil;
-import com.google.utils.StreamToString;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.InputStream;
-import java.util.Map;
-import java.util.Objects;
+import javax.xml.bind.JAXBException;
+
 
 /**
  * @author wk
@@ -33,39 +29,24 @@ public class WeChatController extends BaseController {
     @Autowired
     SignatureUtil signatureUtil;
 
-    @RequestMapping(value = "/handler", method = {RequestMethod.GET, RequestMethod.POST})
-    public void processPost() throws Exception {
-
-        this.getRequest().setCharacterEncoding("UTF-8");
-        this.getResponse().setCharacterEncoding("UTF-8");
-
-        logger.info("开始校验信息是否是从微信服务器发出");
-        boolean isPost = Objects.equals("POST", this.getRequest().getMethod().toUpperCase());
-        if (isPost) {
-            logger.info("接入成功，正在处理逻辑");
-            InputStream inputStream = this.getRequest().getInputStream();
-            String xml = StreamToString.getString(inputStream, "UTF-8");
-            logger.info("inputStream :{}。{}", inputStream, xml);
-            Map<String, String> params = JaxbUtil.xmlToMap(xml);
-            String respXml = messageHandleService.handleMessage(params);
-            if (StringUtils.isNotBlank(respXml)) {
-                // 输出流
-                this.getResponse().getWriter().write(respXml);
-            }
-        } else {
-            // 签名
-            String signature = this.getRequest().getParameter("signature");
-            // 时间戳
-            String timestamp = this.getRequest().getParameter("timestamp");
-            // 随机数
-            String nonce = this.getRequest().getParameter("nonce");
-            // 通过检验signature对请求进行校验，若校验成功则原样返回echostr，表示接入成功，否则接入失败
-            if (signatureUtil.checkSignature(signature, timestamp, nonce)) {
-                // 随机字符串
-                String echostr = this.getRequest().getParameter("echostr");
-                logger.info("接入成功，echostr {}", echostr);
-                this.getResponse().getWriter().write(echostr);
-            }
+    @GetMapping("/handler")
+    public String validateAccess(String signature, String timestamp, String nonce, String echostr) {
+        logger.info("开始测试接入微信...");
+        if (!signatureUtil.checkSignature(signature, timestamp, nonce)) {
+            logger.error("公众号接入失败");
+            return null;
         }
+        logger.info("公众号接入成功,echostr:[{}]", echostr);
+        return echostr;
     }
+
+    @PostMapping("/handler")
+    public String handleMessage(@RequestBody RcvCommonMsg rcvCommonMsg) throws Exception {
+        String replyMsg = messageHandleService.handleMessage(rcvCommonMsg);
+        // TODO 暂不支持直接bean注解输出
+        String rcvMsg = XmlConvertUtils.beanToXml(rcvCommonMsg, RcvCommonMsg.class);
+        logger.info("公众号接收消息:[{}}, 回复消息:[{}]", rcvMsg, replyMsg);
+        return replyMsg;
+    }
+
 }

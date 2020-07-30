@@ -3,6 +3,9 @@ package com.google.config.redisConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author wk
@@ -20,6 +23,11 @@ public class AccessTokenConfig {
      *
      * @param accessToken
      */
+    public void setAccessToken(String accessToken, long timeout) {
+        redisTemplate.opsForValue().set("ACCESS_TOKEN", accessToken);
+        redisTemplate.expire("ACCESS_TOKEN", timeout, TimeUnit.MILLISECONDS);
+    }
+
     public void setAccessToken(String accessToken) {
         redisTemplate.opsForValue().set("ACCESS_TOKEN", accessToken);
     }

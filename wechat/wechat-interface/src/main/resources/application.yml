@@ -4,7 +4,7 @@ spring:
   #数据源配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/scm_zhonghujin_v2_dev?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8
+    url: jdbc:mysql://localhost:3306/spring_family?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8
     username:
     password:
     # 使用druid连接池
@@ -25,6 +25,7 @@ spring:
     sql-script-encoding: utf-8
   #redis配置
   redis:
+    database: 0
     host: 127.0.0.1
     port: 6379
     password:
@@ -34,7 +35,6 @@ spring:
       max-wait: -1
       max-idle: 8
       min-idle: 0
-    database: 0
 #微信参数配置
 wechat:
   #接入微信开发平台参数

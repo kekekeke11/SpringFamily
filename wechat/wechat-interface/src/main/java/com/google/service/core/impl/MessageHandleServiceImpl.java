@@ -1,16 +1,23 @@
 package com.google.service.core.impl;
 
-import com.google.dto.BaseMessage;
-import com.google.dto.WeChatResult;
-import com.google.service.core.CodeHandleService;
+import com.google.commons.util.DateTimeUtils;
+import com.google.commons.util.XmlConvertUtils;
+import com.google.constants.MsgType;
+import com.google.dao.ReplyMessageDao;
+import com.google.entity.ReplyMessage;
+import com.google.model.ImgReplyMsg;
+import com.google.model.RcvCommonMsg;
+import com.google.model.TextReplyMsg;
+import com.google.model.VoiceReplyMsg;
 import com.google.service.core.MessageHandleService;
-import com.google.utils.JaxbUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import javax.xml.bind.JAXBException;
+import java.text.MessageFormat;
+import java.util.Arrays;
 
 /**
  * @author wk
@@ -23,57 +30,101 @@ public class MessageHandleServiceImpl implements MessageHandleService {
     private static final Logger logger = LoggerFactory.getLogger(MessageHandleServiceImpl.class);
 
     @Autowired
-    private CodeHandleService codeHandleService;
+    private ReplyMessageDao replyMessageDao;
 
     /**
      * 对来自微信的消息作出响应(包含消息和事件)
      *
-     * @param params
+     * @param rcvCommonMsg
      * @return
      * @throws Exception
      */
     @Override
-    public String handleMessage(Map<String, String> params) throws Exception {
+    public String handleMessage(RcvCommonMsg rcvCommonMsg) throws Exception {
+        String toUser = rcvCommonMsg.getFromUserName();
+        String fromUser = rcvCommonMsg.getToUserName();
+        Long createTime = DateTimeUtils.getTimeStamp();
+        String msgType = rcvCommonMsg.getMsgType();
 
-        logger.info("开始处理【message】信息");
-
-        String result = null;
-
-        if (params != null && params.size() > 0) {
-            BaseMessage msgInfo = new BaseMessage();
-            String createTime = params.get("CreateTime");
-            String msgId = params.get("MsgId");
-            msgInfo.setCreateTime((createTime != null && !"".equals(createTime)) ? Integer.parseInt(createTime) : 0);
-            msgInfo.setFromUserName(params.get("FromUserName"));
-            msgInfo.setMsgId((msgId != null && !"".equals(msgId)) ? Long.parseLong(msgId) : 0);
-            msgInfo.setToUserName(params.get("ToUserName"));
-            WeChatResult resp = codeHandleService.handleCode(params, msgInfo);
-            if (null == resp) {
-                return null;
+        String replayMsg = null;
+        try {
+            switch (msgType) {
+                case MsgType.TEXT:
+                    replayMsg = handleTextMsg(toUser, fromUser, createTime, rcvCommonMsg.getContent());
+                    break;
+                case MsgType.IMAGE:
+                    replayMsg = handleImageMsg(toUser, fromUser, createTime, rcvCommonMsg.getMediaId());
+                    break;
+                case MsgType.VOICE:
+                    replayMsg = handleVoiceMsg(toUser, fromUser, createTime, rcvCommonMsg.getMediaId());
+                    break;
+                case MsgType.VIDEO:
+                    replayMsg = handleVideoMsg();
+                    break;
+                case MsgType.SHORT_VIDEO:
+                    replayMsg = handleShortVideoMsg();
+                    break;
+                case MsgType.LOCATION:
+                    replayMsg = handleLocationMsg();
+                    break;
+                case MsgType.LINK:
+                    replayMsg = handleLinkMsg();
+                    break;
             }
-            logger.info("响应成功的消息: {}", resp.getObject());
-            //对象转xml
-            String xml = JaxbUtil.convertToXml(resp.getObject(), "UTF-8", false);
-            result = xml;
-     /*       boolean success = resp.isSuccess(); // 如果 为true,则表示返回xml文件, 直接转换即可,否则按类型
-            if (success) {
-                result = resp.getObject().toString();
-            } else {
-                int type = resp.getType(); // 这里规定 1 图文消息 否则直接转换
-                if (type == WeChatResult.NEWSMSG) {
-                    NewsMessage message = (NewsMessage) resp.getObject();
-                    result = MessageUtil.newsMessagegToXml(message);
-                    return result;
-                } else {
-                    BaseMessage baseMessage = (BaseMessage) resp.getObject();
-                    result = MessageUtil.baseMessageToXml(baseMessage);
-                    return result;
-                }
-            }*/
-        } else {
-            result = "msg is wrong";
-
+        } catch (JAXBException e) {
+            logger.error("文本转换异常，接收:[{}]", rcvCommonMsg);
+            String defaultBusy = replyMessageDao.findByKeyword("default_busy").getText();
+            return MessageFormat.format(defaultBusy, toUser, fromUser, createTime);
         }
-        return result;
+        return replayMsg;
+    }
+
+    // 文本消息回复
+    private String handleTextMsg(String toUser, String fromUser, Long createTime, String rcvContent)
+            throws JAXBException {
+        // 关键字回复，可使用properties或数据库
+        ReplyMessage replyMessage = replyMessageDao.findByKeyword(rcvContent);
+        if (replyMessage != null && !replyMessage.getText().isEmpty()) {
+            TextReplyMsg textReplyMsg = new TextReplyMsg().setToUserName(toUser).setFromUserName(fromUser)
+                    .setCreateTime(createTime).setContent(replyMessage.getText());
+            return XmlConvertUtils.beanToXml(textReplyMsg, TextReplyMsg.class);
+        }
+
+        return null;
+    }
+
+    private String handleImageMsg(String toUser, String fromUser, Long createTime, String rcvMediaId)
+            throws JAXBException {
+        ImgReplyMsg imgReplyMsg = new ImgReplyMsg().setToUserName(toUser).setFromUserName(fromUser)
+                .setCreateTime(createTime).setMediaId(Arrays.asList(rcvMediaId));
+        return XmlConvertUtils.beanToXml(imgReplyMsg, ImgReplyMsg.class);
+    }
+
+    private String handleVoiceMsg(String toUser, String fromUser, Long createTime, String rcvMediaId)
+            throws JAXBException {
+        VoiceReplyMsg voiceReplyMsg = new VoiceReplyMsg().setToUserName(toUser).setFromUserName(fromUser)
+                .setCreateTime(createTime).setMediaId(Arrays.asList(rcvMediaId));
+        return XmlConvertUtils.beanToXml(voiceReplyMsg, VoiceReplyMsg.class);
+    }
+
+    // 待完善
+    private String handleVideoMsg() {
+        return null;
+    }
+
+    private String handleShortVideoMsg() {
+        return null;
+    }
+
+    private String handleMusicMsg() {
+        return null;
+    }
+
+    private String handleLocationMsg() {
+        return null;
+    }
+
+    private String handleLinkMsg() {
+        return null;
     }
 }
