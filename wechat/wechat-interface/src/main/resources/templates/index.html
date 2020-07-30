@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>绑定微信</title>
+    <script src="../js/jquery-1.10.2.min.js"></script>
+    <script src="../js/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <button @click="getWeChatUrl()">绑定微信</button>
+    <img id="shareImage" :src="imageUrl"/>
+</div>
+</body>
+<script>
+    var vm = new Vue({
+        el: "#app",
+        data: {
+            imageUrl: ''
+        },
+        methods: {
+            getWeChatUrl: function () {
+                $.post("./qrcode/create", {bid: "e0db1df66e314540a7cbb7d572ff95709193"}, function (data) {
+                    console.log("data",data)
+                    vm.imageUrl = data;
+                })
+            }
+        }
+    })
+</script>
+</html>

@@ -83,4 +83,16 @@ public class RcvCommonMsg {
     @XmlElement(name = "Url")
     private String url;
 
+    //事件类型
+    @XmlElement(name = "Event")
+    private String event;
+
+    //事件KEY值
+    @XmlElement(name = "EventKey")
+    private String eventKey;
+
+    //二维码的ticket，可用来换取二维码图片
+    @XmlElement(name = "Ticket")
+    private String ticket;
+
 }

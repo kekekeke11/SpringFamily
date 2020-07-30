@@ -21,4 +21,27 @@ public class CustUacService {
     public List<CustUac> listCustUac() {
         return custUacDao.listCustUac();
     }
+
+    /**
+     * uac信息保存
+     *
+     * @param custUac
+     */
+    public void saveCustUac(CustUac custUac) {
+        custUacDao.save(custUac);
+    }
+
+    /**
+     * 通过微信查询
+     *
+     * @param wechat
+     * @return
+     */
+    public CustUac getCustUacByWeChat(String wechat) {
+        return custUacDao.getCustUacByWechat(wechat);
+    }
+
+    public CustUac getCustUacByBid(String bid) {
+        return custUacDao.getCustUacByBid(bid);
+    }
 }

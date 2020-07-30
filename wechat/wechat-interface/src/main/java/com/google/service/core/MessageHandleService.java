@@ -6,6 +6,6 @@ import com.google.model.RcvCommonMsg;
 
 public interface MessageHandleService {
 
-    String handleMessage(RcvCommonMsg rcvCommonMsg) throws Exception;
+    String handleMessage(RcvCommonMsg rcvCommonMsg);
 
 }

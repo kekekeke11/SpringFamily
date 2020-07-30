@@ -30,7 +30,7 @@ public class AccountManagementService {
 
     public static Logger log = LoggerFactory.getLogger(MenuService.class);
 
-    public void productTempQrcode(Map<String, Object> params) {
+    public String productTempQrcode(Map<String, Object> params) {
         //{"expire_seconds": 604800, "action_name": "QR_SCENE", "action_info": {"scene": {"scene_id": 123}}}
         //{"expire_seconds": 604800, "action_name": "QR_STR_SCENE", "action_info": {"scene": {"scene_str": "test"}}}
         JSONObject jsonObject = new JSONObject();
@@ -44,35 +44,40 @@ public class AccountManagementService {
         //二维码详细信息
         JSONObject action_info = new JSONObject();
         JSONObject scene = new JSONObject();
-        scene.put("scene_str", "腾讯公司");
+        scene.put("scene_str", params.get("bid"));
         action_info.put("scene", scene);
         jsonObject.put("action_info", action_info);
-        this.send(jsonObject.toJSONString(), accessTokenConfig.getAccessToken(), "创建临时二维码");
+        String ticket = this.send(jsonObject.toJSONString(), accessTokenConfig.getAccessToken(), "创建临时二维码");
+        if (StringUtils.isNotBlank(ticket)) {
+            JSONObject resp = JSON.parseObject(ticket);
+//            {"ticket":"gQH47joAAAAAAAAAASxodHRwOi8vd2VpeGluLnFxLmNvbS9xL2taZ2Z3TVRtNzJXV1Brb3ZhYmJJAAIEZ23sUwMEmm
+//                3sUw==","expire_seconds":60,"url":"http://weixin.qq.com/q/kZgfwMTm72WWPkovabbI"}
+//            https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=TICKET
+            String ticketUrl = "https://mp.weixin.qq.com/cgi-bin/showqrcode?ticket=TICKET";
+            return ticketUrl.replace("TICKET", resp.getString("ticket"));
+        }
+        return ticket;
     }
 
-    public Integer send(String jsonParam, String access_token, String remark) {
-        int result = 0;
+    public String send(String jsonParam, String access_token, String remark) {
+        String resp = "";
         if (access_token != null) {
             JSONObject jsonObject = null;
             try {
                 String url = QRCODE_URL.replace("ACCESS_TOKEN", access_token);
-                String resp = HttpClientUtils.doPostJson(url, jsonParam);
+                resp = HttpClientUtils.doPostJson(url, jsonParam);
                 System.out.println(remark + "接口：" + resp);
-                if (StringUtils.isNotBlank(resp)) {
-                    jsonObject = JSON.parseObject(resp);
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             if (null != jsonObject) {
                 if (0 != jsonObject.getIntValue("errcode")) {
-                    result = jsonObject.getIntValue("errcode");
                     log.error(remark + "失败 errcode:" + jsonObject.getIntValue("errcode")
                             + "，errmsg:" + jsonObject.getString("errmsg"));
                 }
             }
         }
-        return result;
+        return resp;
     }
 
 

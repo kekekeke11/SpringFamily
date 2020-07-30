@@ -16,4 +16,6 @@ public class MsgType {
     public static final String LINK = "link";
     public static final String MUSIC = "music";
     public static final String NEWS = "news";
+
+    public static final String EVENT = "event";
 }

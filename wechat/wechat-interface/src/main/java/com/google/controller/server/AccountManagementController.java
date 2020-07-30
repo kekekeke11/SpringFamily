@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @author wk
  * @Description:帐号管理
@@ -26,8 +29,9 @@ public class AccountManagementController {
      */
     @ResponseBody
     @RequestMapping(value = "create", method = {RequestMethod.GET, RequestMethod.POST})
-    public String sendTemplateManage() {
-        accountManagementService.productTempQrcode(null);
-        return "调用成功";
+    public String sendTemplateManage(String bid) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("bid", bid);
+        return accountManagementService.productTempQrcode(map);
     }
 }

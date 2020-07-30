@@ -2,13 +2,16 @@ package com.google.service.core.impl;
 
 import com.google.commons.util.DateTimeUtils;
 import com.google.commons.util.XmlConvertUtils;
+import com.google.constants.EventType;
 import com.google.constants.MsgType;
 import com.google.dao.ReplyMessageDao;
+import com.google.entity.CustUac;
 import com.google.entity.ReplyMessage;
 import com.google.model.ImgReplyMsg;
 import com.google.model.RcvCommonMsg;
 import com.google.model.TextReplyMsg;
 import com.google.model.VoiceReplyMsg;
+import com.google.service.CustUacService;
 import com.google.service.core.MessageHandleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +35,9 @@ public class MessageHandleServiceImpl implements MessageHandleService {
     @Autowired
     private ReplyMessageDao replyMessageDao;
 
+    @Autowired
+    private CustUacService custUacService;
+
     /**
      * 对来自微信的消息作出响应(包含消息和事件)
      *
@@ -40,7 +46,7 @@ public class MessageHandleServiceImpl implements MessageHandleService {
      * @throws Exception
      */
     @Override
-    public String handleMessage(RcvCommonMsg rcvCommonMsg) throws Exception {
+    public String handleMessage(RcvCommonMsg rcvCommonMsg) {
         String toUser = rcvCommonMsg.getFromUserName();
         String fromUser = rcvCommonMsg.getToUserName();
         Long createTime = DateTimeUtils.getTimeStamp();
@@ -69,6 +75,11 @@ public class MessageHandleServiceImpl implements MessageHandleService {
                     break;
                 case MsgType.LINK:
                     replayMsg = handleLinkMsg();
+                    break;
+                case MsgType.EVENT:
+                    replayMsg = handleEvent(rcvCommonMsg);
+                    break;
+                default:
                     break;
             }
         } catch (JAXBException e) {
@@ -126,5 +137,53 @@ public class MessageHandleServiceImpl implements MessageHandleService {
 
     private String handleLinkMsg() {
         return null;
+    }
+
+    /**
+     * 消息类型为：
+     * event事件
+     *
+     * @return
+     */
+    private String handleEvent(RcvCommonMsg rcvCommonMsg) {
+        if (rcvCommonMsg != null && MsgType.EVENT.equals(rcvCommonMsg.getMsgType())) {
+            System.out.println("这是什么事件：" + rcvCommonMsg.getEvent());
+            System.out.println("扫码人：" + rcvCommonMsg.getFromUserName());
+            //该用户是否关注了公众号，查表
+            boolean b = false;
+            if (b) {
+                System.out.println("还没有关注，进行绑定...");
+                //EventKey：qrscene_为前缀，后面为二维码的参数值
+            } else {
+                System.out.println("已关注，进行绑定...");
+                //事件KEY值，是一个32位无符号整数，即创建二维码时的二维码scene_id
+            }
+            //扫描带参数二维码关注事件
+            if (EventType.subscribe.equals(rcvCommonMsg.getEvent()) && rcvCommonMsg.getEventKey().startsWith("qrscene_")) {
+                //去掉前缀
+                String key = rcvCommonMsg.getEventKey().replace("qrscene_", "");
+                System.out.println("扫描带参数二维码关注  " + key);
+                //通过获取的key进行绑定平台企业
+                this.bindWeChat(rcvCommonMsg.getFromUserName(), key);
+            } else if (EventType.SCAN.equals(rcvCommonMsg.getEvent())) {
+                //扫描带参数二维码浏览（已关注）事件
+                String eventKey = rcvCommonMsg.getEventKey();
+                System.out.println(rcvCommonMsg.getFromUserName() + "扫描带参数二维码已经关注 " + eventKey);
+                this.bindWeChat(rcvCommonMsg.getFromUserName(), eventKey);
+            }
+        }
+        return null;
+    }
+
+    private void bindWeChat(String fromUserName, String key) {
+        //绑定uac
+        CustUac custUac = custUacService.getCustUacByBid(key);
+        if (custUac != null) {
+            custUac.setWechat(fromUserName);
+            custUacService.saveCustUac(custUac);
+            System.out.println("绑定成功，" + custUac.getUserName());
+        } else {
+            System.out.println("绑定失败");
+        }
     }
 }

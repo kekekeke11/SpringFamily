@@ -1,5 +1,7 @@
 package com.google.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -8,6 +10,7 @@ import java.util.Date;
  *
  * @author iuv
  */
+@Data
 @Entity
 @Table(name = "T_CUST_UAC")
 public class CustUac {
@@ -59,75 +62,6 @@ public class CustUac {
     @Column(name = "IS_REG")
     private Integer isReg;
 
-    /**
-     * 头像
-     */
-    private String photo;
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getQQ() {
-        return QQ;
-    }
-
-    public void setQQ(String qQ) {
-        QQ = qQ;
-    }
-
-    public String getWechat() {
-        return wechat;
-    }
-
-    public void setWechat(String wechat) {
-        this.wechat = wechat;
-    }
-
-    public Integer getIdType() {
-        return idType;
-    }
-
-    public void setIdType(Integer idType) {
-        this.idType = idType;
-    }
-
-    public String getIdCard() {
-        return idCard;
-    }
-
-    public void setIdCard(String idCard) {
-        this.idCard = idCard;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    public Integer getIsReg() {
-        return isReg;
-    }
-
-    public void setIsReg(Integer isReg) {
-        this.isReg = isReg;
-    }
-
     // 是否锁定(0:正常 1:锁定)
     @Column(name = "LOCKED")
     private Integer locked;
@@ -147,87 +81,4 @@ public class CustUac {
     // 是否修改密码
     @Column(name = "MODIFY_PWD")
     private Integer modifyPwd;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getMobile() {
-        return mobile;
-    }
-
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-
-    public Integer getLocked() {
-        return locked;
-    }
-
-    public void setLocked(Integer locked) {
-        this.locked = locked;
-    }
-
-    public Date getLockedTime() {
-        return lockedTime;
-    }
-
-    public void setLockedTime(Date lockedTime) {
-        this.lockedTime = lockedTime;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Integer getStatus() {
-        return status;
-    }
-
-    public void setStatus(Integer status) {
-        this.status = status;
-    }
-
-    public Integer getModifyPwd() {
-        return modifyPwd;
-    }
-
-    public void setModifyPwd(Integer modifyPwd) {
-        this.modifyPwd = modifyPwd;
-    }
-
-    public String getPhoto() {
-        return photo;
-    }
-
-    public void setPhoto(String photo) {
-        this.photo = photo;
-    }
-
-    public String getBid() {
-        return bid;
-    }
-
-    public void setBid(String bid) {
-        this.bid = bid;
-    }
-
-
 }
