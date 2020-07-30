@@ -1,4 +1,4 @@
-package com.google.controller;
+package com.google.controller.core;
 
 import com.google.service.core.MessageHandleService;
 import com.google.utils.JaxbUtil;
@@ -18,7 +18,7 @@ import java.util.Objects;
 
 /**
  * @author wk
- * @Description:
+ * @Description: 微信公众号返回给服务端，处理
  * @date 2020/7/27 13:57
  **/
 @RestController

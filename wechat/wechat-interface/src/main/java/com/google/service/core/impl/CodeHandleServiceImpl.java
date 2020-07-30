@@ -1,6 +1,6 @@
 package com.google.service.core.impl;
 
-import com.google.config.MessagegConstant;
+import com.google.constants.MessagegConstant;
 import com.google.dto.BaseMessage;
 import com.google.dto.WeChatResult;
 import com.google.service.core.CodeHandleService;

@@ -1,6 +1,6 @@
 package com.google.service.core.impl;
 
-import com.google.controller.WeChatController;
+import com.google.controller.core.WeChatController;
 import com.google.dto.BaseMessage;
 import com.google.dto.TextMessage;
 import com.google.dto.WeChatResult;

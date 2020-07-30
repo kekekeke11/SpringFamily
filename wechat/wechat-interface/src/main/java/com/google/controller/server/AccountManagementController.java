@@ -1,4 +1,4 @@
-package com.google.controller;
+package com.google.controller.server;
 
 import com.google.service.accountManagement.AccountManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author wk
- * @Description:
+ * @Description:帐号管理
  * @date 2020/7/29 16:53
  **/
 @RequestMapping("qrcode/")

@@ -24,9 +24,9 @@ public class WeChatApplication {
     TokenThread tokenThread;
 
     /**
-     * 定时任务获取token，每小时
+     * 定时任务获取token，每1.5时
      */
-    @Scheduled(fixedRate = 600000)
+    @Scheduled(fixedRate = 5400000)
     public void cronGetToken() {
         tokenThread.getAccessToken();
     }

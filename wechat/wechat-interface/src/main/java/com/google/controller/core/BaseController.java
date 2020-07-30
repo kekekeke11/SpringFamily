@@ -1,4 +1,4 @@
-package com.google.controller;
+package com.google.controller.core;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
  * @date 2020/7/27 13:56
  **/
 public class BaseController {
-
-    protected static final String _CSRF_RANDOM_TOKEN = "_CSRF_RANDOM_TOKEN";
 
     @Autowired
     private HttpServletRequest request;
