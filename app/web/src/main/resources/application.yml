@@ -1,6 +1,15 @@
 server:
   port: 9797
 spring:
+  devtools:
+    restart:
+      enabled: true  #设置开启热部署
+      additional-paths: src/main/java,src/main/resources #重启目录
+  resources:
+    static-locations: classpath:/templates/,classpath:/static/
+  mvc:
+    view:
+      suffix: .html
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/scm_zhonghujin_v2_dev?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=GMT%2B8
@@ -22,3 +31,15 @@ spring:
     poolPreparedStatements: true
     maxOpenPreparedStatements: 20
     sql-script-encoding: utf-8
+    #redis配置
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    password:
+    lettuce:
+      shutdown-timeout: 0
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
