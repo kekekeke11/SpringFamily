@@ -1,12 +1,16 @@
 package com.google.webSocket;
 
+import com.alibaba.fastjson.JSONObject;
 import com.google.config.MyApplicationContextAware;
+import com.google.dto.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -69,7 +73,8 @@ public class MyWebsocketServer {
     public void onMessage(String message) {
         log.info("服务端收到客户端发来的消息: {}", message);
         String flag = redisTemplate.opsForValue().get("uacBid_1c64e3952f544d4da0d0907dfb407f1e3006");
-        this.sendAll(flag);
+        //this.sendAll(flag);
+        this.sendToOne(JSONObject.parseObject(message, Message.class));
     }
 
     /**
@@ -80,6 +85,22 @@ public class MyWebsocketServer {
     private void sendAll(String message) {
         for (Map.Entry<String, Session> sessionEntry : clients.entrySet()) {
             sessionEntry.getValue().getAsyncRemote().sendText(message);
+        }
+    }
+
+    /**
+     * 单发消息
+     *
+     * @param message
+     */
+    private void sendToOne(Message message) {
+        Session s = clients.get(message.getUserId());
+        if (s != null) {
+            try {
+                s.getBasicRemote().sendText(message.getMessage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
