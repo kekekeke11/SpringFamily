@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -74,7 +73,11 @@ public class MyWebsocketServer {
         log.info("服务端收到客户端发来的消息: {}", message);
         String flag = redisTemplate.opsForValue().get("uacBid_1c64e3952f544d4da0d0907dfb407f1e3006");
         //this.sendAll(flag);
-        this.sendToOne(JSONObject.parseObject(message, Message.class));
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("userId", message);
+        jsonObject.put("message", flag);
+        //{"userId":"1c64e3952f544d4da0d0907dfb407f1e3006","message":flag}
+        this.sendToOne(JSONObject.parseObject(jsonObject.toJSONString(), Message.class));
     }
 
     /**
