@@ -2,6 +2,7 @@ package com.google.service.core.impl;
 
 import com.google.commons.util.DateTimeUtils;
 import com.google.commons.util.XmlConvertUtils;
+import com.google.config.redisConfig.AccessTokenConfig;
 import com.google.constants.EventType;
 import com.google.constants.MsgType;
 import com.google.dao.ReplyMessageDao;
@@ -37,6 +38,9 @@ public class MessageHandleServiceImpl implements MessageHandleService {
 
     @Autowired
     private CustUacService custUacService;
+
+    @Autowired
+    private AccessTokenConfig accessTokenConfig;
 
     /**
      * 对来自微信的消息作出响应(包含消息和事件)

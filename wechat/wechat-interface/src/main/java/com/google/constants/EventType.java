@@ -16,4 +16,6 @@ public class EventType {
     //已关注-扫码事件
     public static final String SCAN = "SCAN";
 
+    public static final String VIEW = "VIEW";
+
 }

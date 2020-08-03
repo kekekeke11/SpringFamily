@@ -16,4 +16,16 @@ public class IndexController {
     public String sendTemplateManage() {
         return "/index";
     }
+
+    /**
+     * 绑定微信
+     *
+     * @param code
+     * @param state
+     * @return
+     */
+    @RequestMapping(value = "/bind", method = {RequestMethod.GET, RequestMethod.POST})
+    public String bind(String code, String state) {
+        return "/bind";
+    }
 }

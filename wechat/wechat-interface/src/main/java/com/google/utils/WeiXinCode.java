@@ -16,15 +16,18 @@ public class WeiXinCode {
     //程序入口
     public static void main(String[] args) {
         //生成二维码的地址
-        String s="https://www.baidu.com";
+        String s = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx50d4e7bbd034f1de&redirect_uri=" +
+                "http://f4zx4x.natappfree.cc/bind" +
+                "&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect";
         //二维码存储地址
         getQrcodeImage(s, "C:/Users/wk/Desktop/b.png");
     }
 
     /**
      * 生成方法
-     * @param content  二维码扫描地址
-     * @param imgPath  图片存储地址
+     *
+     * @param content 二维码扫描地址
+     * @param imgPath 图片存储地址
      */
     public static void getQrcodeImage(String content, String imgPath) {
         //图片宽度
