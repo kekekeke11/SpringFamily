@@ -1,10 +1,14 @@
 package com.google.controller;
 
-import com.google.utils.http.HttpClientUtils;
+import com.google.service.LoginService;
+import com.google.utils.R;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * @author wk
@@ -15,11 +19,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class IndexController {
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private LoginService loginService;
 
-    @RequestMapping(value = "/index")
+    @RequestMapping(value = "/index.htm")
     public String index() {
+        return "login";
+    }
 
-        return "index";
+    @RequestMapping(value = "/")
+    public String indexDefault() {
+        return "login";
+    }
+
+
+    @RequestMapping(value = "/login.htm")
+    @ResponseBody
+    public Map<String, Object> login(HttpSession httpSession, String mobile, String pwd) {
+        try {
+            loginService.login(httpSession, mobile, pwd);
+        } catch (Exception e) {
+            return R.fail(e);
+        }
+        return R.succ();
     }
 }
