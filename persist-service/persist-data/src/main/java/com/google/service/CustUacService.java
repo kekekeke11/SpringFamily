@@ -18,6 +18,17 @@ public class CustUacService {
     @Autowired
     private CustUacDao custUacDao;
 
+    /**
+     * 登录
+     *
+     * @param mobile
+     * @param pwd
+     * @return
+     */
+    public CustUac getCustUacByMobileAndPwd(String mobile, String pwd) {
+        return custUacDao.getCustUacByMobileAndPwd(mobile, pwd);
+    }
+
     public List<CustUac> listCustUac() {
         return custUacDao.listCustUac();
     }
