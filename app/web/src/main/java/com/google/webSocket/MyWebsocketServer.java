@@ -2,7 +2,7 @@ package com.google.webSocket;
 
 import com.alibaba.fastjson.JSONObject;
 import com.google.config.MyApplicationContextAware;
-import com.google.dto.Message;
+import com.google.webSocket.dto.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -97,7 +97,7 @@ public class MyWebsocketServer {
      * @param message
      */
     private void sendToOne(Message message) {
-        Session s = clients.get(message.getUserId());
+        Session s = clients.get(message.getUacId());
         if (s != null) {
             try {
                 s.getBasicRemote().sendText(message.getMessage());

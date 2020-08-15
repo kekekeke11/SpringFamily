@@ -1,4 +1,4 @@
-package com.google.dto;
+package com.google.webSocket.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author wk
- * @Description:
+ * @Description: WebSocket消息发送对象
  * @date 2020/7/31 15:26
  **/
 @Data
@@ -16,7 +16,13 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Message {
 
-    private String userId;
+    /**
+     * 消息接收方
+     */
+    private String uacId;
 
+    /**
+     * 消息
+     */
     private String message;
 }
