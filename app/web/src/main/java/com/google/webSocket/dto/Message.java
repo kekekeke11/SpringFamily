@@ -30,4 +30,9 @@ public class Message {
      * 消息
      */
     private String message;
+
+    /**
+     * 消息发送时间
+     */
+    private String sendTime;
 }

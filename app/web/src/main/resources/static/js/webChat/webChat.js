@@ -7,6 +7,8 @@ var vm = new Vue({
         friendList: [],//
 
         enterMessage: '',//待发送的消息
+        //聊天记录ul
+        chatRecordUl: '',
     },
     created: function () {
     },
@@ -32,8 +34,31 @@ var vm = new Vue({
                 }
                 ws.onmessage = function (e) {
                     //当客户端收到服务端发来的消息时，触发onmessage事件，参数e.data包含server传递过来的数据
+                    let data = JSON.parse(e.data);
                     console.log(e.data);
                     //刷新好友列表
+                    let toCustUac = vm.toCustUac;
+                    let tempLi = '<li>\n' +
+                        '                                        <div class="conversation-list">\n' +
+                        '                                            <div class="chat-avatar">\n' +
+                        '                                                <img th:src="@{/assets/images/users/avatar-4.jpg}" alt="">\n' +
+                        '                                            </div>\n' +
+                        '                                            <div class="user-chat-content">\n' +
+                        '                                                <div class="ctext-wrap">\n' +
+                        '                                                    <div class="ctext-wrap-content">\n' +
+                        '                                                        <p class="mb-0">\n' +
+                        '                                                            ' + data.message + '\n' +
+                        '                                                        </p>\n' +
+                        '                                                        <p class="chat-time mb-0"><i class="ri-time-line align-middle"></i>\n' +
+                        '                                                            <span class="align-middle">10:00</span></p>\n' +
+                        '                                                    </div>\n' +
+                        '                                                </div>\n' +
+                        '                                                <div class="conversation-name"><span>' + toCustUac.userName + '</span>\n' +
+                        '                                                </div>\n' +
+                        '                                            </div>\n' +
+                        '                                        </div>\n' +
+                        '                                    </li>';
+                    vm.chatRecordUl = vm.chatRecordUl + tempLi;
                 }
                 ws.onclose = function (e) {
                     //当客户端收到服务端发送的关闭连接请求时，触发onclose事件
@@ -55,10 +80,33 @@ var vm = new Vue({
                 let enterMessage = vm.enterMessage;
                 if (enterMessage != undefined & enterMessage != null && enterMessage.length > 0) {
                     let messageObj = {
-                        toUacId: 'e0db1df66e314540a7cbb7d572ff95709193',
+                        toUacId: vm.toCustUac.bid,
                         message: vm.enterMessage
                     };
                     ws.send(JSON.stringify(messageObj));
+                    //输出聊天记录Html
+                    let my = vm.custUac;
+                    let tempLi =
+                        '<li class="right">\n' +
+                        '                                        <div class="conversation-list">\n' +
+                        '                                            <div class="chat-avatar">\n' +
+                        '                                                <img th:src="@{/assets/images/users/avatar-1.jpg}" alt="">\n' +
+                        '                                            </div>\n' +
+                        '                                            <div class="user-chat-content">\n' +
+                        '                                                <div class="ctext-wrap">\n' +
+                        '                                                    <div class="ctext-wrap-content">\n' +
+                        '                                                        <p class="mb-0">\n' +
+                        '                                                            ' + vm.enterMessage + '\n' +
+                        '                                                        </p>\n' +
+                        '                                                        <p class="chat-time mb-0"><i class="ri-time-line align-middle"></i>\n' +
+                        '                                                            <span class="align-middle">10:02</span></p>\n' +
+                        '                                                    </div>\n' +
+                        '                                                </div>\n' +
+                        '                                                <div class="conversation-name">' + my.userName + '</div>\n' +
+                        '                                            </div>\n' +
+                        '                                        </div>\n' +
+                        '                                    </li>';
+                    vm.chatRecordUl = vm.chatRecordUl + tempLi;
                     //输入框置空
                     vm.enterMessage = '';
                     //存储浏览记录
@@ -68,6 +116,16 @@ var vm = new Vue({
                 alert("您已断开连接")
             }
         },
+        //选择聊天好友
+        selectChatFriend: function (event, friendItem) {
+            let currentTarget = event.currentTarget;
+            //先移除全部li active，再添加当前的
+            currentTarget.parentElement.setAttribute("class", "active");
+            if (friendItem != undefined && friendItem != null) {
+                let toCustUac = JSON.stringify(friendItem);
+                vm.toCustUac = JSON.parse(toCustUac);
+            }
+        },
         //退出登录 th:href="@{/logout.htm}
         logout: function () {
             console.log("logout", ws != undefined && ws != null && ws.readyState == ws.OPEN)
@@ -75,6 +133,6 @@ var vm = new Vue({
                 ws.close();
             }
             window.location.href = "../logout.htm";
-        }
+        },
     },
 })

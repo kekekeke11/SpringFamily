@@ -411,7 +411,7 @@
                                             <!--四种消息状态-->
                                             <ul class="list-unstyled chat-list chat-user-list">
                                                 <li v-for="friendItem in friendList">
-                                                    <a href="#">
+                                                    <a @click="selectChatFriend($event,friendItem)">
                                                         <div class="media">
                                                             <div class="chat-user-img online align-self-center mr-3">
                                                                 <img th:src="@{/assets/images/users/avatar-2.jpg}"

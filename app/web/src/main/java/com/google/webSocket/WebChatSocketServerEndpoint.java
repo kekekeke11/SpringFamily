@@ -48,7 +48,7 @@ public class WebChatSocketServerEndpoint {
             onlineUsers.put(custUac.getBid(), this);
         }
         //推送系统消息
-        this.getAllOnlineUser().stream().forEach((toUac) -> {
+       /* this.getAllOnlineUser().stream().forEach((toUac) -> {
             WebChatSocketServerEndpoint endpoint = onlineUsers.get(toUac);
             if (endpoint != null && !toUac.equals(custUac.getBid())) {
                 try {
@@ -57,7 +57,7 @@ public class WebChatSocketServerEndpoint {
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
     }
 
     /**
