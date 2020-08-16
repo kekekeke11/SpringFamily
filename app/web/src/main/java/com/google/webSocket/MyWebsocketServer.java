@@ -97,7 +97,7 @@ public class MyWebsocketServer {
      * @param message
      */
     private void sendToOne(Message message) {
-        Session s = clients.get(message.getUacId());
+        Session s = clients.get(message.getToUacId());
         if (s != null) {
             try {
                 s.getBasicRemote().sendText(message.getMessage());

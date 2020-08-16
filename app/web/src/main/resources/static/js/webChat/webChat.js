@@ -2,8 +2,9 @@ var ws;
 var vm = new Vue({
     el: '#webChatApp',
     data: {
-        custUac: {},//当前用户信息
-        toCustUac: {},//聊天接收信息
+        custUac: {},//当前页面用户
+        toCustUac: {},//聊天好友信息
+        enterMessage: '',//待发送的消息
     },
     created: function () {
     },
@@ -16,7 +17,7 @@ var vm = new Vue({
         }, "json")
     },
     methods: {
-        createWebSocket: function () {
+        createWebSocket: function (sessionWs) {
             if ("WebSocket" in window) {
                 ws = new WebSocket("ws://localhost:9797/webChat"); //创建WebSocket连接　
                 ws.onopen = function () {
@@ -26,12 +27,6 @@ var vm = new Vue({
                 ws.onmessage = function (e) {
                     //当客户端收到服务端发来的消息时，触发onmessage事件，参数e.data包含server传递过来的数据
                     console.log(e.data);
-                    if (e.data == 'true') {
-                        ws.close();
-                        alert("绑定成功");
-                    } else {
-                        console.log("没结果" + new Date().getTime());
-                    }
                 }
                 ws.onclose = function (e) {
                     //当客户端收到服务端发送的关闭连接请求时，触发onclose事件
@@ -47,13 +42,21 @@ var vm = new Vue({
                 alert("您的浏览器不支持WebSocket");
             }
         },
+        //发送按钮
         sendMessage: function () {
             if (ws != undefined && ws != null && ws.readyState == ws.OPEN) {
-                let message = {
-                    uacId: '',
-                    message: '收到消息了吗'
-                };
-                ws.send("收到消息了吗？");
+                let enterMessage = vm.enterMessage;
+                if (enterMessage != undefined & enterMessage != null && enterMessage.length > 0) {
+                    let messageObj = {
+                        toUacId: 'e0db1df66e314540a7cbb7d572ff95709193',
+                        message: vm.enterMessage
+                    };
+                    ws.send(JSON.stringify(messageObj));
+                    //输入框置空
+                    vm.enterMessage = '';
+                    //存储浏览记录
+                    //sessionStorage.setItem("ws", ws);
+                }
             } else {
                 alert("您已断开连接")
             }

@@ -1,13 +1,12 @@
 package com.google.webSocket;
 
 import com.alibaba.fastjson.JSONObject;
-import com.google.config.MyApplicationContextAware;
 import com.google.constants.Constants;
 import com.google.entity.CustUac;
 import com.google.webSocket.config.GetHttpSessionConfigurator;
 import com.google.webSocket.dto.Message;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
@@ -28,12 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 @Slf4j
 public class WebChatSocketServerEndpoint {
-
-    private static RedisTemplate<String, String> redisTemplate;
-
-    static {
-        redisTemplate = (RedisTemplate<String, String>) MyApplicationContextAware.getApplicationContext().getBean("redisTemplate");
-    }
 
     private Session session;
 
@@ -58,9 +51,9 @@ public class WebChatSocketServerEndpoint {
         //推送系统消息
         this.getAllOnlineUser().stream().forEach((toUac) -> {
             WebChatSocketServerEndpoint endpoint = onlineUsers.get(toUac);
-            if (endpoint != null) {
+            if (endpoint != null && !toUac.equals(custUac.getBid())) {
                 try {
-                    endpoint.session.getBasicRemote().sendText("这是一个系统消息，" + new Date().getTime());
+                    endpoint.session.getBasicRemote().sendText("您的好友，【" + custUac.getUserName() + "】上线了。。。");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -75,9 +68,11 @@ public class WebChatSocketServerEndpoint {
      */
     @OnClose
     public void onClose(Session session) {
-        log.info("有用户断开了, id为:{}", session.getId());
-        //将掉线的用户移除在线的组里
-        onlineUsers.remove(session.getId());
+        //从容器中删除下线的用户
+        CustUac custUac = (CustUac) this.httpSession.getAttribute(Constants.SESSION_UAC);
+        log.info("用户【{}】断开了链接。。。。", custUac.getUserName());
+        onlineUsers.remove(custUac.getBid());
+        //获取推送的消息，系统通知
     }
 
     /**
@@ -98,25 +93,26 @@ public class WebChatSocketServerEndpoint {
     @OnMessage
     public void onMessage(String message, Session session) {
         log.info("服务端收到客户端发来的消息: {}", message);
-        String flag = redisTemplate.opsForValue().get("uacBid_1c64e3952f544d4da0d0907dfb407f1e3006");
-        //this.sendAll(flag);
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("userId", message);
-        jsonObject.put("message", flag);
-        //{"userId":"1c64e3952f544d4da0d0907dfb407f1e3006","message":flag}
-        this.sendToOne(JSONObject.parseObject(jsonObject.toJSONString(), Message.class));
-    }
-
-    /**
-     * 单发消息
-     *
-     * @param message
-     */
-    private void sendToOne(Message message) {
-        WebChatSocketServerEndpoint endpoint = onlineUsers.get(message.getUacId());
-        if (endpoint != null) {
+        if (StringUtils.isNotBlank(message)) {
+            //将message转换成Message对象
+            Message messageObj = JSONObject.parseObject(message, Message.class);
+            //消息接收方
+            String toUser = messageObj.getToUacId();
+            //消息内容
+            String msgData = messageObj.getMessage();
+            //获取当前登录的用户
+            CustUac custUac = (CustUac) this.httpSession.getAttribute(Constants.SESSION_UAC);
+            //返回给发送的信息
+            Message data = new Message();
+            data.setToUacId(toUser);
+            data.setMessage(msgData);
+            data.setFromUacId(custUac.getBid());
+            //获取推送给指定用户的消息格式数据
+            String resultMessage = JSONObject.toJSONString(data);
+            //发送消息
             try {
-                endpoint.session.getBasicRemote().sendText(message.getMessage());
+                WebChatSocketServerEndpoint endpoint = onlineUsers.get(toUser);
+                endpoint.session.getBasicRemote().sendText(resultMessage);
             } catch (IOException e) {
                 e.printStackTrace();
             }

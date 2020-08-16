@@ -19,7 +19,12 @@ public class Message {
     /**
      * 消息接收方
      */
-    private String uacId;
+    private String toUacId;
+
+    /**
+     * 消息来源
+     */
+    private String fromUacId;
 
     /**
      * 消息
