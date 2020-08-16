@@ -24,4 +24,6 @@ public interface CustUacDao extends CrudRepository<CustUac, Long> {
     @Query(value = "from CustUac where status=0 and mobile=:mobile and password=:password")
     CustUac getCustUacByMobileAndPwd(@Param("mobile") String mobile, @Param("password") String password);
 
+    @Query(value = "from CustUac where status=0 and id<>:uacId")
+    List<CustUac> listCustUacNotLoginUac(@Param("uacId") Long uacId);
 }

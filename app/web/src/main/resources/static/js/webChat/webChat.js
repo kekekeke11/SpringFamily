@@ -4,6 +4,8 @@ var vm = new Vue({
     data: {
         custUac: {},//当前页面用户
         toCustUac: {},//聊天好友信息
+        friendList: [],//
+
         enterMessage: '',//待发送的消息
     },
     created: function () {
@@ -12,21 +14,26 @@ var vm = new Vue({
         $.post("./loadInfo.htm", function (data) {
             if (data.custUac != undefined && data.custUac != null) {
                 vm.custUac = data.custUac;
+                if (data.friendList != null) {
+                    vm.friendList = data.friendList;
+                }
                 vm.createWebSocket();
             }
         }, "json")
     },
     methods: {
-        createWebSocket: function (sessionWs) {
+        createWebSocket: function () {
             if ("WebSocket" in window) {
                 ws = new WebSocket("ws://localhost:9797/webChat"); //创建WebSocket连接　
                 ws.onopen = function () {
                     //当WebSocket创建成功时，触发onopen事件
                     console.log("open");
+                    //刷新好友列表
                 }
                 ws.onmessage = function (e) {
                     //当客户端收到服务端发来的消息时，触发onmessage事件，参数e.data包含server传递过来的数据
                     console.log(e.data);
+                    //刷新好友列表
                 }
                 ws.onclose = function (e) {
                     //当客户端收到服务端发送的关闭连接请求时，触发onclose事件
@@ -63,7 +70,7 @@ var vm = new Vue({
         },
         //退出登录 th:href="@{/logout.htm}
         logout: function () {
-            console.log("logout",ws != undefined && ws != null && ws.readyState == ws.OPEN)
+            console.log("logout", ws != undefined && ws != null && ws.readyState == ws.OPEN)
             if (ws != undefined && ws != null && ws.readyState == ws.OPEN) {
                 ws.close();
             }

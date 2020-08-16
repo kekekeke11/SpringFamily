@@ -55,4 +55,8 @@ public class CustUacService {
     public CustUac getCustUacByBid(String bid) {
         return custUacDao.getCustUacByBid(bid);
     }
+
+    public List<CustUac> listCustUacNotLoginUac(Long uacId) {
+        return custUacDao.listCustUacNotLoginUac(uacId);
+    }
 }
