@@ -21,17 +21,20 @@ public class IndexController {
     @Autowired
     private LoginService loginService;
 
-    @RequestMapping(value = "/index.htm")
-    public String index() {
-        return "login";
-    }
-
     @RequestMapping(value = "/")
     public String indexDefault() {
         return "login";
     }
 
 
+    /**
+     * 登录action
+     *
+     * @param httpSession
+     * @param mobile
+     * @param pwd
+     * @return
+     */
     @RequestMapping(value = "/login.htm")
     @ResponseBody
     public Map<String, Object> login(HttpSession httpSession, String mobile, String pwd) {
@@ -41,5 +44,17 @@ public class IndexController {
             return R.fail(e);
         }
         return R.succ();
+    }
+
+    /**
+     * 退出action
+     *
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/logout.htm")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
     }
 }

@@ -60,6 +60,14 @@ var vm = new Vue({
             } else {
                 alert("您已断开连接")
             }
+        },
+        //退出登录 th:href="@{/logout.htm}
+        logout: function () {
+            console.log("logout",ws != undefined && ws != null && ws.readyState == ws.OPEN)
+            if (ws != undefined && ws != null && ws.readyState == ws.OPEN) {
+                ws.close();
+            }
+            window.location.href = "../logout.htm";
         }
     },
 })

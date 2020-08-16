@@ -13,7 +13,6 @@ import javax.servlet.http.HttpSession;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -69,10 +68,12 @@ public class WebChatSocketServerEndpoint {
     @OnClose
     public void onClose(Session session) {
         //从容器中删除下线的用户
-        CustUac custUac = (CustUac) this.httpSession.getAttribute(Constants.SESSION_UAC);
-        log.info("用户【{}】断开了链接。。。。", custUac.getUserName());
-        onlineUsers.remove(custUac.getBid());
-        //获取推送的消息，系统通知
+        if (this.httpSession != null) {
+            CustUac custUac = (CustUac) this.httpSession.getAttribute(Constants.SESSION_UAC);
+            log.info("用户【{}】断开了链接。。。。", custUac.getUserName());
+            onlineUsers.remove(custUac.getBid());
+            //获取推送的消息，系统通知
+        }
     }
 
     /**
