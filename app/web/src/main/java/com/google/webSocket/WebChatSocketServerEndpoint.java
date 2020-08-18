@@ -113,7 +113,11 @@ public class WebChatSocketServerEndpoint {
             //发送消息
             try {
                 WebChatSocketServerEndpoint endpoint = onlineUsers.get(toUser);
-                endpoint.session.getBasicRemote().sendText(resultMessage);
+                if (endpoint != null) {
+                    endpoint.session.getBasicRemote().sendText(resultMessage);
+                } else {
+                    //对方不在线情况
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
